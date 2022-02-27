@@ -740,11 +740,4 @@ compilation_prepare()
 
 	fi
 
-
-
-	if linux-version compare $version ge 4.4 && linux-version compare $version lt 5.8; then
-		display_alert "Adjusting" "Framebuffer driver for ST7789 IPS display" "info"
-		process_patch_file "${SRC}/patch/misc/fbtft-st7789v-invert-color.patch" "applying"
-	fi
-
 }
