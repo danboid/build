@@ -711,31 +711,31 @@ compilation_prepare()
 
 	# Wireless drivers for Realtek 8822BS chipsets
 
-	if linux-version compare "${version}" ge 4.4 && [ "$EXTRAWIFI" == yes ]; then
+	if linux-version compare "${version}" ge 5.15 && [ "$EXTRAWIFI" == yes ]; then
 
 		# attach to specifics tag or branch
 		display_alert "Adding" "Wireless drivers for Realtek 8822BS chipsets ${rtl8822bsver}" "info"
 
-		local rtl8822bsver="branch:local_rtl8822bs"
-		fetch_from_repo "$GITHUB_SOURCE/150balbes/wifi" "rtl8822bs" "${rtl8822bsver}" "yes"
+		local rtl8822bsver="branch:main"
+		fetch_from_repo "$GITHUB_SOURCE/danboid/rtw88" "rtw88" "${rtl8822bsver}" "yes"
 		cd "$kerneldir" || exit
-		rm -rf "$kerneldir/drivers/net/wireless/rtl8822bs"
-		mkdir -p $kerneldir/drivers/net/wireless/rtl8822bs/
-		cp -R "${SRC}/cache/sources/rtl8822bs/${rtl8822bsver#*:}"/{core,hal,include,os_dep,platform,bluetooth,getAP,rtl8822b.mk} \
-		$kerneldir/drivers/net/wireless/rtl8822bs
+		rm -rf "$kerneldir/drivers/net/wireless/rtw88"
+		mkdir -p $kerneldir/drivers/net/wireless/rtw88/
+		cp -R "${SRC}/cache/sources/rtw88/${rtl8822bsver#*:}"/* \
+		$kerneldir/drivers/net/wireless/rtw88
 
 		# Makefile
-		cp "${SRC}/cache/sources/rtl8822bs/${rtl8822bsver#*:}/Makefile" \
-		$kerneldir/drivers/net/wireless/rtl8822bs/Makefile
+		cp "${SRC}/cache/sources/rtw88/${rtl8822bsver#*:}/Makefile" \
+		$kerneldir/drivers/net/wireless/rtw88/Makefile
 
 		# Kconfig
-		sed -i 's/---help---/help/g' "${SRC}/cache/sources/rtl8822bs/${rtl8822bsver#*:}/Kconfig"
-		cp "${SRC}/cache/sources/rtl8822bs/${rtl8822bsver#*:}/Kconfig" \
-		"$kerneldir/drivers/net/wireless/rtl8822bs/Kconfig"
+		sed -i 's/---help---/help/g' "${SRC}/cache/sources/rtw88/${rtl8822bsver#*:}/Kconfig"
+		cp "${SRC}/cache/sources/rtw88/${rtl8822bsver#*:}/Kconfig" \
+		"$kerneldir/drivers/net/wireless/rtw88/Kconfig"
 
 		# Add to section Makefile
-		echo "obj-\$(CONFIG_RTL8822BS) += rtl8822bs/" >> $kerneldir/drivers/net/wireless/Makefile
-		sed -i '/source "drivers\/net\/wireless\/ti\/Kconfig"/a source "drivers\/net\/wireless\/rtl8822bs\/Kconfig"' \
+		echo "obj-\$(CONFIG_RTW88) += rtw88/" >> $kerneldir/drivers/net/wireless/Makefile
+		sed -i '/source "drivers\/net\/wireless\/ti\/Kconfig"/a source "drivers\/net\/wireless\/rtw88\/Kconfig"' \
 		$kerneldir/drivers/net/wireless/Kconfig
 
 	fi
