@@ -331,7 +331,7 @@ compilation_prepare()
 		# attach to specifics tag or branch
 		display_alert "Adding" "Wireless drivers for Realtek 8822BS chipsets ${rtl8822bsver}" "info"
 
-		local rtl8822bsver="branch:master"
+		local rtl8822bsver="branch:main"
 		fetch_from_repo "$GITHUB_SOURCE/danboid/rtw88" "rtw88" "${rtl8822bsver}" "yes"
 		cd "$kerneldir" || exit
 		rm -rf "$kerneldir/drivers/net/wireless/rtw88"
